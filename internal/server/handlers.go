@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,8 +20,6 @@ func getUser(db *db.DB, c *gin.Context) {
 	tracer_ctx, _ := c.MustGet(tracer.RequestTracerContext).(context.Context)
 	newCtx, span := otel.Tracer(tracer.AppName).Start(tracer_ctx, "getUser")
 	defer span.End()
-
-	fmt.Printf("[getUser] span ID %s\n", span.SpanContext().SpanID())
 
 	if err := c.ShouldBindUri(&user); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
